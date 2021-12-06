@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { getOwnBalance } from './Web3Client';
 import { commerce } from './lib/commerce';
 import { Products, Navbar, Cart, Checkout } from './components';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -6,6 +7,17 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 const App = () => {
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState({});
+    const [balance, setBalance] = useState(0);
+
+    const fetchBalance = () => {
+		getOwnBalance()
+			.then((balance) => {
+				setBalance(balance);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
     const fetchProducts = async () => {
         const { data } = await commerce.products.list();
@@ -48,7 +60,7 @@ const App = () => {
 
     return (
         <Router>
-            <div>
+            <div classname= "App">
                 <Navbar totalItems={cart.total_items}/>
                 <Switch>
                     <Route exact path="/">
@@ -66,6 +78,8 @@ const App = () => {
                         <Checkout cart={cart} />
                     </Route>
                 </Switch>
+                <p>Your balance is {balance}</p>
+                <button onClick={() => fetchBalance()}>Refresh balance</button>
             </div>
         </Router>
     );
