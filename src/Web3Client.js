@@ -61,7 +61,7 @@ export const init = async () => {
 
 	erc20Contract = new web3.eth.Contract(
 		erc20Abi,
-		'0xb45800bd61463405a733990eBf18287388D941D7'
+		'0x2665c0295ddc65a24394d511ef306b087626d860'
 	);
 
 	isInitialized = true;
@@ -76,6 +76,6 @@ export const getOwnBalance = async () => {
 		.balanceOf(selectedAccount)
 		.call()
 		.then((balance) => {
-			return Web3.utils.fromWei(balance);
+			return Web3.utils.fromWei(balance)*10000000000000000;
 		});
 };
