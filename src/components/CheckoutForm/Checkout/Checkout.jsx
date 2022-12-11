@@ -4,10 +4,10 @@ import { Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider,
 import { commerce } from '../../../lib/commerce';
 import useStyles from './styles';
 import AddressForm from '../AddressForm';
-import PaymentForm from '../PaymentForm';
+import ReviewForm from '../ReviewForm';
 
 
-const steps =['Shipping Address', 'Payment details'];
+const steps =['Shipping Address', 'Review'];
 
 const Checkout = ({ cart }) => {
     const [activeStep, setActiveStep] = useState(0);
@@ -47,7 +47,7 @@ const Checkout = ({ cart }) => {
 
     const Form = () => activeStep == 0 
         ? <AddressForm checkoutToken={checkoutToken} next={next} />
-        : <PaymentForm />
+        : <ReviewForm />
 
     return (
         <>
