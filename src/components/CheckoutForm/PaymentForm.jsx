@@ -1,11 +1,15 @@
 import React from 'react'
 
-const PaymentForm = () => {
+const ReviewForm = () => {
     return (
-        <div>
-            PaymentForm
-        </div>
-    )
-}
-
-export default PaymentForm
+      <form>
+        <label>
+          Rate Our Service For Better Quality!
+          <textarea name="review" />
+        </label>
+        <input type="submit" value="Submit Review" />
+      </form>
+    );
+  };
+  
+  export default ReviewForm;

@@ -5,7 +5,7 @@ import { Products, Navbar, Cart, Checkout } from './components';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 const App = () => {
-    const [products, setProducts] = useState([]);
+    const [categories, setCategory] = useState([]);
     const [cart, setCart] = useState({});
     const [balance, setBalance] = useState(0);
 
@@ -20,10 +20,21 @@ const App = () => {
 	};
 
     const fetchProducts = async () => {
-        const { data } = await commerce.products.list();
-
-        setProducts(data);
-    }
+        const { data: products } = await commerce.products.list();
+        const { data: catData } = await commerce.categories.list();
+        const ppcat = catData.reduce((acc, category) => {
+            return [
+                ...acc,
+                {
+                    ...category,
+                    productsData: products.filter((product) =>
+                      product.categories.find((cat) => cat.id === category.id)
+                    ),
+                },  
+            ];
+        }, []);
+        setCategory(ppcat);
+    };
 
     const fetchCart = async () => {
         setCart(await commerce.cart.retrieve())
@@ -64,7 +75,7 @@ const App = () => {
                 <Navbar totalItems={cart.total_items}/>
                 <Switch>
                     <Route exact path="/">
-                        <Products products={products} onAddToCart={handleAddToCart} />
+                        <Products categories={categories} onAddToCart={handleAddToCart} />
                     </Route>
                     <Route exact path="/cart">
                         <Cart 
@@ -78,8 +89,8 @@ const App = () => {
                         <Checkout cart={cart} />
                     </Route>
                 </Switch>
-                <p>Your balance is {balance}</p>
-                <button onClick={() => fetchBalance()}>Refresh balance</button>
+                {/* <p>Your balance is {balance}</p>
+                <button onClick={() => fetchBalance()}>Refresh balance</button> */}
             </div>
         </Router>
     );
